@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pokédex</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Pokédex</h1>
+        <div class="buscador-container">
+            <input type="text" id="buscador" placeholder="Busca por nombre o número">
+            <button id="buscarBtn">Buscar</button>
+            <div id="sugerencias" class="sugerencias"></div>
+        </div>
+
+        <div id="error" class="oculto">Pokémon no encontrado</div>
+
+        <div id="pokemon-info" class="oculto">
+            <h2 id="pokemon-nombre"></h2>
+            <p id="pokemon-numero"></p>
+            <img id="pokemon-imagen" alt="">
+            
+            <div id="tipos" class="categoria"></div>
+            <div id="debilidades" class="categoria"></div>
+            <div id="resistencias" class="categoria"></div>
+            <div id="inmunes" class="categoria"></div>
+            <div id="neutros" class="categoria"></div>
+			<div id="estadisticas" class="categoria"></div>
+
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

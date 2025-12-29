@@ -1,0 +1,20 @@
+{
+  "normal": { "nombre": "Normal", "color": "#A8A77A" },
+  "fire": { "nombre": "Fuego", "color": "#EE8130" },
+  "water": { "nombre": "Agua", "color": "#6390F0" },
+  "electric": { "nombre": "Eléctrico", "color": "#F7D02C" },
+  "grass": { "nombre": "Planta", "color": "#7AC74C" },
+  "ice": { "nombre": "Hielo", "color": "#96D9D6" },
+  "fighting": { "nombre": "Lucha", "color": "#C22E28" },
+  "poison": { "nombre": "Veneno", "color": "#A33EA1" },
+  "ground": { "nombre": "Tierra", "color": "#E2BF65" },
+  "flying": { "nombre": "Volador", "color": "#A98FF3" },
+  "psychic": { "nombre": "Psíquico", "color": "#F95587" },
+  "bug": { "nombre": "Bicho", "color": "#A6B91A" },
+  "rock": { "nombre": "Roca", "color": "#B6A136" },
+  "ghost": { "nombre": "Fantasma", "color": "#735797" },
+  "dragon": { "nombre": "Dragón", "color": "#6F35FC" },
+  "dark": { "nombre": "Siniestro", "color": "#705746" },
+  "steel": { "nombre": "Acero", "color": "#B7B7CE" },
+  "fairy": { "nombre": "Hada", "color": "#D685AD" }
+}
