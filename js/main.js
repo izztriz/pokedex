@@ -179,6 +179,49 @@ async function mostrarPokemon(pokemon) {
     mostrarCategoria(neutrosContainer, categorias.neutros, 'Neutros');
     mostrarCategoria(debilidadesContainer, categorias.debilidades, 'Debilidades');
 
+	// ESTADÍSTICAS
+    estadisticasContainer.appendChild(crearTitulo('Estadísticas base'));
+    pokemon.stats.forEach(s => {
+        const statCont = document.createElement('div');
+        statCont.style.display = 'flex';
+        statCont.style.alignItems = 'center';
+        statCont.style.margin = '6px 0';
+
+        const nombre = document.createElement('span');
+        nombre.textContent = traducirStat(s.nombre);
+        nombre.style.width = '125px';
+        nombre.style.fontWeight = 'bold';
+
+        const barraCont = document.createElement('div');
+        barraCont.style.flex = '1';
+        barraCont.style.height = '25px';
+        barraCont.style.background = '#e0e0e0';
+        barraCont.style.borderRadius = '12px';
+        barraCont.style.position = 'relative';
+        barraCont.style.overflow = 'hidden';
+        barraCont.style.marginLeft = '8px';
+
+        const barra = document.createElement('div');
+        barra.style.height = '100%';
+        barraCont.style.width = '200px'; // proporcional al max
+        barra.style.background = '#4caf50';
+        barra.style.borderRadius = '12px 0 0 12px';
+        barra.style.display = 'flex';
+        barra.style.alignItems = 'center';
+        barra.style.justifyContent = 'center';
+        barra.style.color = '#fff';
+        barra.style.fontWeight = 'bold';
+        barra.textContent = s.valor;
+
+        barraCont.appendChild(barra);
+        statCont.appendChild(nombre);
+        statCont.appendChild(barraCont);
+        estadisticasContainer.appendChild(statCont);
+		barra.style.background = colorPorStat(s.nombre);
+
+    });
+}
+
 /* =====================
    BUSCADOR
 ===================== */
