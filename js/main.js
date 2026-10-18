@@ -25,6 +25,18 @@ function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+function traducirStat(stat) {
+    const mapa = {
+        hp: 'PS:',
+        attack: 'Ataque:',
+        defense: 'Defensa:',
+        'special-attack': 'Ataque Especial:',
+        'special-defense': 'Defensa Especial:',
+        speed: 'Velocidad:'
+    };
+    return mapa[stat] || stat;
+}
+
 function crearTitulo(texto) {
     const div = document.createElement('div');
     div.className = 'categoria-titulo';
