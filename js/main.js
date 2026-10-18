@@ -8,7 +8,6 @@ const debilidadesContainer = document.getElementById('debilidades');
 const resistenciasContainer = document.getElementById('resistencias');
 const inmunesContainer = document.getElementById('inmunes');
 const neutrosContainer = document.getElementById('neutros');
-const estadisticasContainer = document.getElementById('estadisticas');
 
 const errorMensaje = document.getElementById('error');
 const buscador = document.getElementById('buscador');
