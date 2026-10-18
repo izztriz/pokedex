@@ -8,7 +8,7 @@ const debilidadesContainer = document.getElementById('debilidades');
 const resistenciasContainer = document.getElementById('resistencias');
 const inmunesContainer = document.getElementById('inmunes');
 const neutrosContainer = document.getElementById('neutros');
-// const estadisticasContainer = document.getElementById('estadisticas');
+const estadisticasContainer = document.getElementById('estadisticas');
 
 const errorMensaje = document.getElementById('error');
 const buscador = document.getElementById('buscador');
@@ -196,7 +196,6 @@ async function mostrarPokemon(pokemon) {
     mostrarCategoria(debilidadesContainer, categorias.debilidades, 'Debilidades');
 
 	// ESTADÍSTICAS
-	/*
     estadisticasContainer.appendChild(crearTitulo('Estadísticas base'));
     pokemon.stats.forEach(s => {
         const statCont = document.createElement('div');
@@ -238,7 +237,6 @@ async function mostrarPokemon(pokemon) {
 
     });
 }
-*/
 
 /* =====================
    BUSCADOR
