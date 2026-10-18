@@ -25,6 +25,7 @@ function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+/*
 function traducirStat(stat) {
     const mapa = {
         hp: 'PS:',
@@ -36,6 +37,7 @@ function traducirStat(stat) {
     };
     return mapa[stat] || stat;
 }
+*/
 
 function crearTitulo(texto) {
     const div = document.createElement('div');
@@ -70,7 +72,7 @@ function limpiarContenedores() {
     resistenciasContainer.innerHTML = '';
     inmunesContainer.innerHTML = '';
     neutrosContainer.innerHTML = '';
-    estadisticasContainer.innerHTML = '';
+   // estadisticasContainer.innerHTML = '';
 }
 
 /* =====================
@@ -173,6 +175,7 @@ async function mostrarPokemon(pokemon) {
             if (span) container.appendChild(span);
         });
     }
+	/*
 	
 		function colorPorStat(stat) {
     switch(stat) {
@@ -185,6 +188,7 @@ async function mostrarPokemon(pokemon) {
         default: return '#4caf50'; // verde
     }
 }
+*/
 
     mostrarCategoria(inmunesContainer, categorias.inmunes, 'Inmunes');
     mostrarCategoria(resistenciasContainer, categorias.resistencias, 'Resistencias');
@@ -192,6 +196,7 @@ async function mostrarPokemon(pokemon) {
     mostrarCategoria(debilidadesContainer, categorias.debilidades, 'Debilidades');
 
 	// ESTADÍSTICAS
+	/*
     estadisticasContainer.appendChild(crearTitulo('Estadísticas base'));
     pokemon.stats.forEach(s => {
         const statCont = document.createElement('div');
@@ -233,6 +238,7 @@ async function mostrarPokemon(pokemon) {
 
     });
 }
+*/
 
 /* =====================
    BUSCADOR
