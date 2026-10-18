@@ -196,7 +196,7 @@ async function mostrarPokemon(pokemon) {
     mostrarCategoria(debilidadesContainer, categorias.debilidades, 'Debilidades');
 
 	// ESTADÍSTICAS
-    estadisticasContainer.appendChild(crearTitulo('Estadísticas base'));
+    estadisticasContainer.appendChild(crearTitulo(''));
     pokemon.stats.forEach(s => {
         const statCont = document.createElement('div');
         statCont.style.display = 'flex';
