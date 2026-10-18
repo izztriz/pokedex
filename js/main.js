@@ -72,7 +72,7 @@ function limpiarContenedores() {
     resistenciasContainer.innerHTML = '';
     inmunesContainer.innerHTML = '';
     neutrosContainer.innerHTML = '';
-   // estadisticasContainer.innerHTML = '';
+   estadisticasContainer.innerHTML = '';
 }
 
 /* =====================
