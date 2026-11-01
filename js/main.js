@@ -28,16 +28,16 @@ let tiposES = {};
 // DICCIONARIOS DE TRADUCCIÓN Y COLORES
 // =====================
 const coloresGeneracion = {
-    'gen1': '#ff5959', // Rojo Kanto
-    'gen2': '#d4ac0d', // Oro Johto
-    'gen3': '#3498db', // Azul Hoenn
-    'gen4': '#9b59b6', // Morado Sinnoh
-    'gen5': '#e67e22', // Naranja Teselia
-    'gen6': '#e91e63', // Rosa Kalos
-    'gen7': '#00bcd4', // Cian Alola
-    'gen8': '#3f51b5', // Índigo Galar
-    'gen9': '#ff9800', // Ámbar Paldea
-    'todos': '#2ecc71'  // Verde Nacional
+    'gen1': '#ff5959', 
+    'gen2': '#d4ac0d', 
+    'gen3': '#3498db', 
+    'gen4': '#9b59b6', 
+    'gen5': '#e67e22', 
+    'gen6': '#e91e63', 
+    'gen7': '#00bcd4', 
+    'gen8': '#3f51b5', 
+    'gen9': '#ff9800', 
+    'todos': '#2ecc71'  
 };
 
 const objetosES = {
@@ -154,8 +154,15 @@ function inicializarSelectorJuegosCustom() {
             optionsContainer.classList.add('oculto');
             selectorContainer.classList.remove('abierto');
             
-            buscador.value = '';
-            buscarPokemon('bulbasaur');
+            // --- NUEVA LÓGICA AQUÍ ---
+            const textoBuscador = buscador.value.trim();
+            if (textoBuscador) {
+                // Si hay algo escrito, intentamos mantenerlo y buscarlo en la nueva gen
+                buscarPokemon(textoBuscador);
+            } else {
+                // Si no hay nada escrito, cargamos a Bulbasaur por defecto
+                buscarPokemon('bulbasaur');
+            }
         });
 
         optionsContainer.appendChild(optionDiv);
