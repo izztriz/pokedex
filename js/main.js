@@ -42,6 +42,42 @@ const coloresGeneracion = {
     'todos': '#2ecc71'  
 };
 
+// Traducción limpia de las versiones del juego para las etiquetas
+const versionesES = {
+    'red': 'Rojo',
+    'blue': 'Azul',
+    'yellow': 'Amarillo',
+    'gold': 'Oro',
+    'silver': 'Plata',
+    'crystal': 'Cristal',
+    'ruby': 'Rubí',
+    'sapphire': 'Zafiro',
+    'emerald': 'Esmeralda',
+    'firered': 'Rojo Fuego',
+    'leafgreen': 'Verde Hoja',
+    'diamond': 'Diamante',
+    'pearl': 'Perla',
+    'platinum': 'Platino',
+    'heartgold': 'Oro HeartGold',
+    'soulsilver': 'Plata SoulSilver',
+    'black': 'Negro',
+    'white': 'Blanco',
+    'black-2': 'Negro 2',
+    'white-2': 'Blanco 2',
+    'x': 'X',
+    'y': 'Y',
+    'omega-ruby': 'Rubí Omega',
+    'alpha-sapphire': 'Zafiro Alfa',
+    'sun': 'Sol',
+    'moon': 'Luna',
+    'ultra-sun': 'Ultrasol',
+    'ultra-moon': 'Ultraluna',
+    'sword': 'Espada',
+    'shield': 'Escudo',
+    'scarlet': 'Scharlach / Púrpura', // o Escarlata
+    'violet': 'Púrpura'
+};
+
 const metodosCapturaES = {
     'walk': 'Caminar',
     'surf': 'Surf',
@@ -66,26 +102,19 @@ function traducirObjeto(nombreIngles) {
     return objetosES[clave] || capitalize(nombreIngles.replace(/-/g, ' '));
 }
 
-// =====================
-// TRADUCCIÓN LIMPIA DE UBICACIONES (Basada 100% en el JSON)
-// =====================
 function limpiarUbicacion(nombreArea) {
     if (!nombreArea) return '';
-    
     let claveBase = nombreArea.replace(/-area$/i, '').toLowerCase();
 
-    // 1. Busca en nuestro archivo locations.json
     if (ubicacionesES[claveBase]) {
         return ubicacionesES[claveBase];
     }
 
-    // 2. Si es una Ruta automática (ej: route-101)
     if (claveBase.startsWith('route-')) {
         let numRuta = claveBase.replace('route-', '').replace(/-/g, ' ');
         return `Ruta ${numRuta.toUpperCase()}`;
     }
 
-    // 3. Si no se encuentra, devuelve el texto limpio formateado
     let limpio = claveBase.replace(/-/g, ' ');
     return limpio.split(' ').map(palabra => capitalize(palabra)).join(' ');
 }
@@ -417,7 +446,7 @@ async function desglosarCadenaEvolutiva(nodo, maxId) {
 }
 
 /* =====================
-   LÓGICA DE CAPTURAR (UBICACIONES)
+   LÓGICA DE CAPTURAR (UBICACIONES Y JUEGOS AGRUPADOS)
 ===================== */
 async function cargarCapturas(nombrePokemon) {
     contenedorCapturar.innerHTML = '<p>Buscando lugares de captura...</p>';
@@ -446,7 +475,8 @@ async function cargarCapturas(nombrePokemon) {
         else if (juegoId === 'gen8') versionesValidas = ['sword', 'shield'];
         else if (juegoId === 'gen9') versionesValidas = ['scarlet', 'violet'];
 
-        let encontrados = false;
+        // Objeto para agrupar los encuentros por nombre de ubicación limpio
+        let mapaUbicacionesAgrupadas = {};
 
         data.forEach(encounter => {
             const versionDetails = juegoId === 'todos' 
@@ -454,38 +484,61 @@ async function cargarCapturas(nombrePokemon) {
                 : encounter.version_details.filter(v => versionesValidas.includes(v.version.name));
 
             if (versionDetails.length > 0) {
-                encontrados = true;
                 const nombreUbicacion = limpiarUbicacion(encounter.location_area.name);
 
-                const tarjeta = document.createElement('div');
-                tarjeta.className = 'tarjeta-captura';
+                if (!mapaUbicacionesAgrupadas[nombreUbicacion]) {
+                    mapaUbicacionesAgrupadas[nombreUbicacion] = [];
+                }
 
-                let detallesHTML = '';
                 versionDetails.forEach(v => {
+                    const nombreVersionES = versionesES[v.version.name] || capitalize(v.version.name);
+                    
                     v.encounter_details.forEach(det => {
                         const metodoTraducido = metodosCapturaES[det.method.name] || capitalize(det.method.name.replace(/-/g, ' '));
-                        detallesHTML += `
-                            <div>
-                                <span class="metodo-badge">${metodoTraducido}</span>
-                                Nivel: ${det.min_level === det.max_level ? det.min_level : `${det.min_level}-${det.max_level}`} 
-                                (Probabilidad: ${det.chance}%)
-                            </div>
-                        `;
+                        
+                        mapaUbicacionesAgrupadas[nombreUbicacion].push({
+                            version: nombreVersionES,
+                            metodo: metodoTraducido,
+                            minLevel: det.min_level,
+                            maxLevel: det.max_level,
+                            chance: det.chance
+                        });
                     });
                 });
-
-                tarjeta.innerHTML = `
-                    <div class="captura-ubicacion">${nombreUbicacion}</div>
-                    <div class="captura-detalles">${detallesHTML}</div>
-                `;
-
-                contenedorCapturar.appendChild(tarjeta);
             }
         });
 
-        if (!encontrados) {
+        const ubicacionesKeys = Object.keys(mapaUbicacionesAgrupadas);
+
+        if (ubicacionesKeys.length === 0) {
             contenedorCapturar.innerHTML = '<p>No disponible de forma salvaje en este juego/generación.</p>';
+            return;
         }
+
+        // Renderizar las tarjetas agrupadas sin duplicados y con sus juegos
+        ubicacionesKeys.forEach(ubicacion => {
+            const tarjeta = document.createElement('div');
+            tarjeta.className = 'tarjeta-captura';
+
+            let detallesHTML = '';
+            mapaUbicacionesAgrupadas[ubicacion].forEach(item => {
+                detallesHTML += `
+                    <div style="margin-bottom: 4px;">
+                        <span style="color: #ffcb05; font-weight: bold; margin-right: 6px;">[${item.version}]</span>
+                        <span class="metodo-badge">${item.metodo}</span>
+                        Nivel: ${item.minLevel === item.maxLevel ? item.minLevel : `${item.minLevel}-${item.maxLevel}`} 
+                        (Probabilidad: ${item.chance}%)
+                    </div>
+                `;
+            });
+
+            tarjeta.innerHTML = `
+                <div class="captura-ubicacion">${ubicacion}</div>
+                <div class="captura-detalles">${detallesHTML}</div>
+            `;
+
+            contenedorCapturar.appendChild(tarjeta);
+        });
 
     } catch (e) {
         console.error("Error al cargar capturas:", e);
