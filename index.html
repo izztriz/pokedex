@@ -5,12 +5,11 @@
     <title>Pokédex</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" type="image/png" href="star.png">
-    <!-- FontAwesome para iconos de la barra inferior -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <!-- Selector de Juegos Personalizado (Arriba Izquierda) -->
+        <!-- Selector de Juegos Personalizado -->
         <div class="selector-juego-custom" id="selector-juego">
             <div class="dropdown-trigger" id="dropdown-trigger">
                 <img src="assets/icons/game-placeholder.png" alt="" class="juego-icono-img placeholder-icon">
@@ -27,18 +26,31 @@
             <div id="sugerencias" class="sugerencias"></div>
         </div>
 
-        <div id="error" class="oculto">Pokémon no encontrado o fuera de esta generación</div>
+        <!-- SECCIÓN 1: INFO -->
+        <div id="seccion-info" class="seccion-tab">
+            <div id="pokemon-info">
+                <h2 id="pokemon-nombre"></h2>
+                <p id="pokemon-numero"></p>
+                <img id="pokemon-imagen" alt="">
+                
+                <div id="tipos" class="categoria"></div>
+                <div id="debilidades" class="categoria"></div>
+                <div id="resistencias" class="categoria"></div>
+                <div id="inmunes" class="categoria"></div>
+                <div id="neutros" class="categoria"></div>
+            </div>
+        </div>
 
-        <div id="pokemon-info">
-            <h2 id="pokemon-nombre"></h2>
-            <p id="pokemon-numero"></p>
-            <img id="pokemon-imagen" alt="">
-            
-            <div id="tipos" class="categoria"></div>
-            <div id="debilidades" class="categoria"></div>
-            <div id="resistencias" class="categoria"></div>
-            <div id="inmunes" class="categoria"></div>
-            <div id="neutros" class="categoria"></div>
+        <!-- SECCIÓN 2: EVOLUCIONES -->
+        <div id="seccion-evoluciones" class="seccion-tab oculto">
+            <h2>Cadena de Evolución</h2>
+            <div id="contenedor-evoluciones" class="contenedor-evoluciones"></div>
+        </div>
+
+        <!-- SECCIÓN 3: CAPTURAR -->
+        <div id="seccion-capturar" class="seccion-tab oculto">
+            <h2>Lugares de Captura</h2>
+            <div id="contenedor-capturar" class="contenedor-capturar"></div>
         </div>
     </div>
 
@@ -55,14 +67,6 @@
         <button class="menu-item" data-seccion="capturar">
             <i class="fa-solid fa-location-dot"></i>
             <span>Capturar</span>
-        </button>
-        <button class="menu-item" data-seccion="movimientos">
-            <i class="fa-solid fa-bolt"></i>
-            <span>Movimientos</span>
-        </button>
-        <button class="menu-item" data-seccion="estrat">
-            <i class="fa-solid fa-burst"></i>
-            <span>Estrat.</span>
         </button>
     </nav>
 
