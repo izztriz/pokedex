@@ -4,10 +4,22 @@
     <meta charset="UTF-8">
     <title>Pokédex</title>
     <link rel="stylesheet" href="css/style.css">
-	<link rel="icon" type="image/png" href="star.png">
+    <link rel="icon" type="image/png" href="star.png">
+    <!-- FontAwesome para iconos de la barra inferior -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
+        <!-- Selector de Juegos Personalizado (Arriba Izquierda) -->
+        <div class="selector-juego-custom" id="selector-juego">
+            <div class="dropdown-trigger" id="dropdown-trigger">
+                <img src="assets/icons/game-placeholder.png" alt="" class="juego-icono-img placeholder-icon">
+                <span id="juego-seleccionado-nombre">Cargando...</span>
+                <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
+            </div>
+            <div class="dropdown-options oculto" id="dropdown-options"></div>
+        </div>
+
         <h1>Pokédex</h1>
         <div class="buscador-container">
             <input type="text" id="buscador" placeholder="Busca por nombre o número">
@@ -15,7 +27,7 @@
             <div id="sugerencias" class="sugerencias"></div>
         </div>
 
-        <div id="error" class="oculto">Pokémon no encontrado</div>
+        <div id="error" class="oculto">Pokémon no encontrado o fuera de esta generación</div>
 
         <div id="pokemon-info" class="oculto">
             <h2 id="pokemon-nombre"></h2>
@@ -27,13 +39,33 @@
             <div id="resistencias" class="categoria"></div>
             <div id="inmunes" class="categoria"></div>
             <div id="neutros" class="categoria"></div>
-			<div id="estadisticas" class="categoria"></div>
-
         </div>
     </div>
+
+    <!-- Barra de navegación flotante inferior -->
+    <nav class="menu-flotante">
+        <button class="menu-item activo" data-seccion="info">
+            <i class="fa-solid fa-circle-info"></i>
+            <span>Info</span>
+        </button>
+        <button class="menu-item" data-seccion="evoluciones">
+            <i class="fa-solid fa-bullseye"></i>
+            <span>Evoluciones</span>
+        </button>
+        <button class="menu-item" data-seccion="capturar">
+            <i class="fa-solid fa-location-dot"></i>
+            <span>Capturar</span>
+        </button>
+        <button class="menu-item" data-seccion="movimientos">
+            <i class="fa-solid fa-bolt"></i>
+            <span>Movimientos</span>
+        </button>
+        <button class="menu-item" data-seccion="estrat">
+            <i class="fa-solid fa-burst"></i>
+            <span>Estrat.</span>
+        </button>
+    </nav>
 
     <script src="js/main.js"></script>
 </body>
 </html>
-
-
