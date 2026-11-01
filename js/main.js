@@ -27,7 +27,7 @@ let ubicacionesES = {};
 let objetosES = {};
 
 // =====================
-// COLORES Y MÉTODOS DE CAPTURA
+// COLORES Y VERSIONES
 // =====================
 const coloresGeneracion = {
     'gen1': '#ff5959', 
@@ -42,40 +42,28 @@ const coloresGeneracion = {
     'todos': '#2ecc71'  
 };
 
-// Traducción limpia de las versiones del juego para las etiquetas
+const coloresVersiones = {
+    'red': '#ff5959', 'blue': '#3498db', 'yellow': '#f1c40f',
+    'gold': '#d4ac0d', 'silver': '#bdc3c7', 'crystal': '#1abc9c',
+    'ruby': '#e74c3c', 'sapphire': '#2980b9', 'emerald': '#27ae60', 'firered': '#e67e22', 'leafgreen': '#2ecc71',
+    'diamond': '#3498db', 'pearl': '#e84393', 'platinum': '#7f8c8d', 'heartgold': '#d4ac0d', 'soulsilver': '#95a5a6',
+    'black': '#2c3e50', 'white': '#ecf0f1', 'black-2': '#34495e', 'white-2': '#bdc3c7',
+    'x': '#3498db', 'y': '#e74c3c', 'omega-ruby': '#c0392b', 'alpha-sapphire': '#1b1464',
+    'sun': '#e67e22', 'moon': '#8e44ad', 'ultra-sun': '#d35400', 'ultra-moon': '#6c5ce7',
+    'sword': '#00a8ff', 'shield': '#e84118',
+    'scarlet': '#ff4757', 'violet': '#706fd3'
+};
+
 const versionesES = {
-    'red': 'Rojo',
-    'blue': 'Azul',
-    'yellow': 'Amarillo',
-    'gold': 'Oro',
-    'silver': 'Plata',
-    'crystal': 'Cristal',
-    'ruby': 'Rubí',
-    'sapphire': 'Zafiro',
-    'emerald': 'Esmeralda',
-    'firered': 'Rojo Fuego',
-    'leafgreen': 'Verde Hoja',
-    'diamond': 'Diamante',
-    'pearl': 'Perla',
-    'platinum': 'Platino',
-    'heartgold': 'Oro HeartGold',
-    'soulsilver': 'Plata SoulSilver',
-    'black': 'Negro',
-    'white': 'Blanco',
-    'black-2': 'Negro 2',
-    'white-2': 'Blanco 2',
-    'x': 'X',
-    'y': 'Y',
-    'omega-ruby': 'Rubí Omega',
-    'alpha-sapphire': 'Zafiro Alfa',
-    'sun': 'Sol',
-    'moon': 'Luna',
-    'ultra-sun': 'Ultrasol',
-    'ultra-moon': 'Ultraluna',
-    'sword': 'Espada',
-    'shield': 'Escudo',
-    'scarlet': 'Scharlach / Púrpura', // o Escarlata
-    'violet': 'Púrpura'
+    'red': 'Rojo', 'blue': 'Azul', 'yellow': 'Amarillo',
+    'gold': 'Oro', 'silver': 'Plata', 'crystal': 'Cristal',
+    'ruby': 'Rubí', 'sapphire': 'Zafiro', 'emerald': 'Esmeralda', 'firered': 'Rojo Fuego', 'leafgreen': 'Verde Hoja',
+    'diamond': 'Diamante', 'pearl': 'Perla', 'platinum': 'Platino', 'heartgold': 'Oro HeartGold', 'soulsilver': 'Plata SoulSilver',
+    'black': 'Negro', 'white': 'Blanco', 'black-2': 'Negro 2', 'white-2': 'Blanco 2',
+    'x': 'X', 'y': 'Y', 'omega-ruby': 'Rubí Omega', 'alpha-sapphire': 'Zafiro Alfa',
+    'sun': 'Sol', 'moon': 'Luna', 'ultra-sun': 'Ultrasol', 'ultra-moon': 'Ultraluna',
+    'sword': 'Espada', 'shield': 'Escudo',
+    'scarlet': 'Escarlata', 'violet': 'Púrpura'
 };
 
 const metodosCapturaES = {
@@ -446,7 +434,7 @@ async function desglosarCadenaEvolutiva(nodo, maxId) {
 }
 
 /* =====================
-   LÓGICA DE CAPTURAR (UBICACIONES Y JUEGOS AGRUPADOS)
+   LÓGICA DE CAPTURAR (SIN CORCHETES Y CON COLOR)
 ===================== */
 async function cargarCapturas(nombrePokemon) {
     contenedorCapturar.innerHTML = '<p>Buscando lugares de captura...</p>';
@@ -475,7 +463,6 @@ async function cargarCapturas(nombrePokemon) {
         else if (juegoId === 'gen8') versionesValidas = ['sword', 'shield'];
         else if (juegoId === 'gen9') versionesValidas = ['scarlet', 'violet'];
 
-        // Objeto para agrupar los encuentros por nombre de ubicación limpio
         let mapaUbicacionesAgrupadas = {};
 
         data.forEach(encounter => {
@@ -491,13 +478,16 @@ async function cargarCapturas(nombrePokemon) {
                 }
 
                 versionDetails.forEach(v => {
-                    const nombreVersionES = versionesES[v.version.name] || capitalize(v.version.name);
+                    const versionKey = v.version.name;
+                    const nombreVersionES = versionesES[versionKey] || capitalize(versionKey);
+                    const colorVersion = coloresVersiones[versionKey] || '#ffcb05';
                     
                     v.encounter_details.forEach(det => {
                         const metodoTraducido = metodosCapturaES[det.method.name] || capitalize(det.method.name.replace(/-/g, ' '));
                         
                         mapaUbicacionesAgrupadas[nombreUbicacion].push({
                             version: nombreVersionES,
+                            color: colorVersion,
                             metodo: metodoTraducido,
                             minLevel: det.min_level,
                             maxLevel: det.max_level,
@@ -515,7 +505,6 @@ async function cargarCapturas(nombrePokemon) {
             return;
         }
 
-        // Renderizar las tarjetas agrupadas sin duplicados y con sus juegos
         ubicacionesKeys.forEach(ubicacion => {
             const tarjeta = document.createElement('div');
             tarjeta.className = 'tarjeta-captura';
@@ -523,11 +512,13 @@ async function cargarCapturas(nombrePokemon) {
             let detallesHTML = '';
             mapaUbicacionesAgrupadas[ubicacion].forEach(item => {
                 detallesHTML += `
-                    <div style="margin-bottom: 4px;">
-                        <span style="color: #ffcb05; font-weight: bold; margin-right: 6px;">[${item.version}]</span>
+                    <div style="margin-bottom: 4px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                        <span style="color: ${item.color}; font-weight: bold; background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 4px; border: 1px solid ${item.color}; font-size: 0.85em;">
+                            ${item.version}
+                        </span>
                         <span class="metodo-badge">${item.metodo}</span>
-                        Nivel: ${item.minLevel === item.maxLevel ? item.minLevel : `${item.minLevel}-${item.maxLevel}`} 
-                        (Probabilidad: ${item.chance}%)
+                        <span>Nivel: ${item.minLevel === item.maxLevel ? item.minLevel : `${item.minLevel}-${item.maxLevel}`} 
+                        (Probabilidad: ${item.chance}%)</span>
                     </div>
                 `;
             });
