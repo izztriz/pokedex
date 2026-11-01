@@ -103,7 +103,7 @@ body {
     background: #333;
 }
 
-/* Contenedor interno en dos líneas perfectamente alineado */
+/* Estructura alineada en dos líneas para las opciones */
 .juego-info-texto {
     display: flex;
     flex-direction: column;
@@ -315,7 +315,7 @@ body {
 
 .metodo-badge {
     background: #333;
-    padding: 1px 5px;
+    padding: 2px 6px;
     border-radius: 4px;
     font-size: 0.85em;
 }
