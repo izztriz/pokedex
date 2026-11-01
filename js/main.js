@@ -115,7 +115,7 @@ const juegosGeneraciones = [
     { id: 'gen1', titulo: 'Generación 1', ediciones: 'Rojo / Azul / Amarillo', maxId: 151, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png' },
     { id: 'gen2', titulo: 'Generación 2', ediciones: 'Oro / Plata / Cristal', maxId: 251, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png' },
     { id: 'gen3', titulo: 'Generación 3', ediciones: 'Rubí / Zafiro / Esmeralda / Rojo Fuego / Verde Hoja', maxId: 386, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ultra-ball.png' },
-    { id: 'gen4', titulo: 'Generación 4', ediciones: 'Diamante / Perla / Platino / Oro / Plata', maxId: 493, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png' },
+    { id: 'gen4', titulo: 'Generación 4', ediciones: 'Diamante / Perla / Platino / HearthGold / SoulSilver', maxId: 493, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png' },
     { id: 'gen5', titulo: 'Generación 5', ediciones: 'Negro / Blanco (1 y 2)', maxId: 649, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/luxury-ball.png' },
     { id: 'gen6', titulo: 'Generación 6', ediciones: 'X / Y / Rubí Omega / Zafiro Alfa', maxId: 721, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/premier-ball.png' },
     { id: 'gen7', titulo: 'Generación 7', ediciones: 'Sol / Luna / Ultrasol / Ultraluna', maxId: 809, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/beast-ball.png' },
@@ -142,7 +142,6 @@ function inicializarSelectorJuegosCustom() {
         const colorGen = coloresGeneracion[juego.id] || '#ffffff';
         const textoGen = juego.id === 'todos' ? 'Todos' : juego.id.replace('gen', 'Gen ');
 
-        // Dentro del desplegable se mantienen las dos líneas
         optionDiv.innerHTML = `
             <img src="${juego.icono}" alt="" class="juego-icono-img" onerror="this.style.opacity='0.3'">
             <div class="juego-info-texto">
@@ -155,7 +154,7 @@ function inicializarSelectorJuegosCustom() {
         optionDiv.addEventListener('click', () => {
             juegoSeleccionadoId = juego.id;
             
-            // AQUÍ ESTÁ EL CAMBIO: En la barra solo ponemos el título
+            // Muestra solo el título principal en la barra cerrada
             triggerTexto.textContent = juego.titulo;
             if (triggerImg) triggerImg.src = juego.icono;
             
@@ -178,7 +177,6 @@ function inicializarSelectorJuegosCustom() {
 
     const defecto = juegosGeneraciones.find(j => j.id === juegoSeleccionadoId);
     if (defecto) {
-        // Y aquí al cargar por defecto también
         triggerTexto.textContent = defecto.titulo;
         if (triggerImg) triggerImg.src = defecto.icono;
     }
@@ -449,68 +447,94 @@ async function cargarCapturas(nombrePokemon) {
     contenedorCapturar.innerHTML = '<p>Buscando lugares de captura...</p>';
 
     try {
-        const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${nombrePokemon}/encounters`);
-        const data = await res.json();
+        const juegoId = juegoSeleccionadoId;
+        const maxIdActual = obtenerMaxIdActual();
+        const perteneceAGeneracion = pokemonActual && (pokemonActual.numero <= maxIdActual || juegoId === 'todos');
+
+        const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${nombrePokemon.toLowerCase()}/encounters`);
+        const data = res.ok ? await res.json() : [];
 
         contenedorCapturar.innerHTML = '';
 
-        if (!data || data.length === 0) {
-            contenedorCapturar.innerHTML = '<p>No hay datos de localización salvaje para este Pokémon.</p>';
-            return;
-        }
-
-        const juegoId = juegoSeleccionadoId;
         let versionesValidas = [];
-
         if (juegoId === 'gen1') versionesValidas = ['red', 'blue', 'yellow'];
         else if (juegoId === 'gen2') versionesValidas = ['gold', 'silver', 'crystal'];
-        else if (juegoId === 'gen3') versionesValidas = ['ruby', 'sapphire', 'emerald', 'firered', 'leafgreen'];
+        else if (juegoId === 'gen3') versionesValidas = ['ruby', 'sapphire', 'emerald', 'firered', 'leafgreen', 'colosseum', 'xd'];
         else if (juegoId === 'gen4') versionesValidas = ['diamond', 'pearl', 'platinum', 'heartgold', 'soulsilver'];
         else if (juegoId === 'gen5') versionesValidas = ['black', 'white', 'black-2', 'white-2'];
         else if (juegoId === 'gen6') versionesValidas = ['x', 'y', 'omega-ruby', 'alpha-sapphire'];
-        else if (juegoId === 'gen7') versionesValidas = ['sun', 'moon', 'ultra-sun', 'ultra-moon'];
-        else if (juegoId === 'gen8') versionesValidas = ['sword', 'shield'];
+        else if (juegoId === 'gen7') versionesValidas = ['sun', 'moon', 'ultra-sun', 'ultra-moon', 'lets-go-pikachu', 'lets-go-eevee'];
+        else if (juegoId === 'gen8') versionesValidas = ['sword', 'shield', 'brilliant-diamond', 'shining-pearl', 'legends-arceus'];
         else if (juegoId === 'gen9') versionesValidas = ['scarlet', 'violet'];
 
         let mapaUbicacionesAgrupadas = {};
 
-        data.forEach(encounter => {
-            const versionDetails = juegoId === 'todos' 
-                ? encounter.version_details 
-                : encounter.version_details.filter(v => versionesValidas.includes(v.version.name));
+        if (data && data.length > 0) {
+            data.forEach(encounter => {
+                const versionDetails = juegoId === 'todos' 
+                    ? encounter.version_details 
+                    : encounter.version_details.filter(v => versionesValidas.includes(v.version.name));
 
-            if (versionDetails.length > 0) {
-                const nombreUbicacion = limpiarUbicacion(encounter.location_area.name);
+                if (versionDetails.length > 0) {
+                    const nombreUbicacion = limpiarUbicacion(encounter.location_area.name);
 
-                if (!mapaUbicacionesAgrupadas[nombreUbicacion]) {
-                    mapaUbicacionesAgrupadas[nombreUbicacion] = [];
-                }
+                    if (!mapaUbicacionesAgrupadas[nombreUbicacion]) {
+                        mapaUbicacionesAgrupadas[nombreUbicacion] = [];
+                    }
 
-                versionDetails.forEach(v => {
-                    const versionKey = v.version.name;
-                    const nombreVersionES = versionesES[versionKey] || capitalize(versionKey);
-                    const colorVersion = coloresVersiones[versionKey] || '#ffcb05';
-                    
-                    v.encounter_details.forEach(det => {
-                        const metodoTraducido = metodosCapturaES[det.method.name] || capitalize(det.method.name.replace(/-/g, ' '));
+                    versionDetails.forEach(v => {
+                        const versionKey = v.version.name;
+                        const nombreVersionES = versionesES[versionKey] || capitalize(versionKey);
+                        const colorVersion = coloresVersiones[versionKey] || '#ffcb05';
                         
-                        mapaUbicacionesAgrupadas[nombreUbicacion].push({
-                            version: nombreVersionES,
-                            color: colorVersion,
-                            metodo: metodoTraducido,
-                            minLevel: det.min_level,
-                            maxLevel: det.max_level,
-                            chance: det.chance
+                        v.encounter_details.forEach(det => {
+                            const metodoOriginal = det.method.name;
+                            const metodoTraducido = metodosCapturaES[metodoOriginal] || capitalize(metodoOriginal.replace(/-/g, ' '));
+                            
+                            const yaExiste = mapaUbicacionesAgrupadas[nombreUbicacion].some(
+                                item => item.version === nombreVersionES && item.metodo === metodoTraducido && item.minLevel === det.min_level
+                            );
+
+                            if (!yaExiste) {
+                                mapaUbicacionesAgrupadas[nombreUbicacion].push({
+                                    version: nombreVersionES,
+                                    color: colorVersion,
+                                    metodo: metodoTraducido,
+                                    minLevel: det.min_level,
+                                    maxLevel: det.max_level,
+                                    chance: det.chance
+                                });
+                            }
                         });
                     });
-                });
-            }
-        });
+                }
+            });
+        }
 
         const ubicacionesKeys = Object.keys(mapaUbicacionesAgrupadas);
 
         if (ubicacionesKeys.length === 0) {
-            contenedorCapturar.innerHTML = '<p>No disponible de forma salvaje en este juego/generación.</p>';
+            if (perteneceAGeneracion) {
+                let lugarExtra = "Localización / Método Especial";
+                let mensajeExtra = "Obtenido mediante regalo de historia, evento, intercambio in-game o DLC.";
+
+                if (juegoId === 'gen8' && (nombrePokemon.toLowerCase() === 'bulbasaur' || nombrePokemon.toLowerCase() === 'ivysaur' || nombrePokemon.toLowerCase() === 'venusaur')) {
+                    lugarExtra = "Dojo Maestro (Isla de la Armadura)";
+                    mensajeExtra = "Te lo entrega el Maestro Mostaz tras superar su primera prueba.";
+                }
+
+                contenedorCapturar.innerHTML = `
+                    <div class="tarjeta-captura" style="padding: 12px 15px; border-left: 4px solid #3498db;">
+                        <div class="captura-ubicacion" style="color: #3498db; font-weight: bold;">${lugarExtra}</div>
+                        <div class="captura-detalles" style="margin-top: 4px; color: #ccc;">
+                            <span class="metodo-badge" style="background: #3498db; color: #fff; margin-right: 6px;">Especial / Regalo</span>
+                            ${mensajeExtra}
+                        </div>
+                    </div>
+                `;
+            } else {
+                contenedorCapturar.innerHTML = '<p>No disponible en este juego/generación.</p>';
+            }
             return;
         }
 
@@ -521,12 +545,12 @@ async function cargarCapturas(nombrePokemon) {
             let detallesHTML = '';
             mapaUbicacionesAgrupadas[ubicacion].forEach(item => {
                 detallesHTML += `
-                    <div style="margin-bottom: 4px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-                        <span style="color: ${item.color}; font-weight: bold; background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 4px; border: 1px solid ${item.color}; font-size: 0.85em;">
+                    <div style="margin-bottom: 6px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                        <span style="color: ${item.color}; font-weight: bold; background: rgba(255,255,255,0.06); padding: 2px 8px; border-radius: 4px; border: 1px solid ${item.color}; font-size: 0.85em;">
                             ${item.version}
                         </span>
                         <span class="metodo-badge">${item.metodo}</span>
-                        <span>Nivel: ${item.minLevel === item.maxLevel ? item.minLevel : `${item.minLevel}-${item.maxLevel}`} 
+                        <span style="font-size: 0.9em; color: #ddd;">Nivel: ${item.minLevel === item.maxLevel ? item.minLevel : `${item.minLevel}-${item.maxLevel}`} 
                         (Probabilidad: ${item.chance}%)</span>
                     </div>
                 `;
