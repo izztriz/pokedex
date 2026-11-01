@@ -108,19 +108,19 @@ function limpiarUbicacion(nombreArea) {
 }
 
 // =====================
-// CONFIGURACIÓN DE JUEGOS POR REGIÓN
+// CONFIGURACIÓN DE JUEGOS POR GENERACIÓN
 // =====================
 const juegosGeneraciones = [
-	{ id: 'todos', nombre: 'Nacional', maxId: 100000, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/safari-ball.png' },
-    { id: 'gen1', nombre: 'Kanto', maxId: 151, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png' },
-    { id: 'gen2', nombre: 'Johto', maxId: 251, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png' },
-    { id: 'gen3', nombre: 'Hoenn', maxId: 386, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ultra-ball.png' },
-    { id: 'gen4', nombre: 'Sinnoh', maxId: 493, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png' },
-    { id: 'gen5', nombre: 'Teselia', maxId: 649, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/luxury-ball.png' },
-    { id: 'gen6', nombre: 'Kalos', maxId: 721, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/premier-ball.png' },
-    { id: 'gen7', nombre: 'Alola', maxId: 809, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/beast-ball.png' },
-    { id: 'gen8', nombre: 'Galar', maxId: 905, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/level-ball.png' },
-    { id: 'gen9', nombre: 'Paldea', maxId: 1025, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/cherish-ball.png' }
+	{ id: 'todos', titulo: 'Nacional', ediciones: 'Todas las generaciones', maxId: 100000, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/safari-ball.png' },
+    { id: 'gen1', titulo: 'Generación 1', ediciones: 'Rojo / Azul / Amarillo', maxId: 151, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png' },
+    { id: 'gen2', titulo: 'Generación 2', ediciones: 'Oro / Plata / Cristal', maxId: 251, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png' },
+    { id: 'gen3', titulo: 'Generación 3', ediciones: 'Rubí / Zafiro / Esmeralda / Rojo Fuego / Verde Hoja', maxId: 386, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ultra-ball.png' },
+    { id: 'gen4', titulo: 'Generación 4', ediciones: 'Diamante / Perla / Platino / Oro / Plata', maxId: 493, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png' },
+    { id: 'gen5', titulo: 'Generación 5', ediciones: 'Negro / Blanco (1 y 2)', maxId: 649, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/luxury-ball.png' },
+    { id: 'gen6', titulo: 'Generación 6', ediciones: 'X / Y / Rubí Omega / Zafiro Alfa', maxId: 721, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/premier-ball.png' },
+    { id: 'gen7', titulo: 'Generación 7', ediciones: 'Sol / Luna / Ultrasol / Ultraluna', maxId: 809, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/beast-ball.png' },
+    { id: 'gen8', titulo: 'Generación 8', ediciones: 'Espada / Escudo', maxId: 905, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/level-ball.png' },
+    { id: 'gen9', titulo: 'Generación 9', ediciones: 'Escarlata / Púrpura', maxId: 1025, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/cherish-ball.png' }
 ];
 
 let juegoSeleccionadoId = juegosGeneraciones[0].id;
@@ -132,6 +132,8 @@ function inicializarSelectorJuegosCustom() {
     const triggerTexto = document.getElementById('juego-seleccionado-nombre');
     const triggerImg = trigger.querySelector('.juego-icono-img');
 
+    if (!optionsContainer || !trigger) return;
+
     optionsContainer.innerHTML = '';
     juegosGeneraciones.forEach(juego => {
         const optionDiv = document.createElement('div');
@@ -140,16 +142,22 @@ function inicializarSelectorJuegosCustom() {
         const colorGen = coloresGeneracion[juego.id] || '#ffffff';
         const textoGen = juego.id === 'todos' ? 'Todos' : juego.id.replace('gen', 'Gen ');
 
+        // Dentro del desplegable se mantienen las dos líneas
         optionDiv.innerHTML = `
             <img src="${juego.icono}" alt="" class="juego-icono-img" onerror="this.style.opacity='0.3'">
-            <span style="flex: 1;">${juego.nombre}</span>
+            <div class="juego-info-texto">
+                <span class="juego-titulo">${juego.titulo}</span>
+                <span class="juego-ediciones">${juego.ediciones}</span>
+            </div>
             <span class="gen-badge" style="color: ${colorGen}; border: 1px solid ${colorGen};">${textoGen}</span>
         `;
 
         optionDiv.addEventListener('click', () => {
             juegoSeleccionadoId = juego.id;
-            triggerTexto.textContent = juego.nombre;
-            triggerImg.src = juego.icono;
+            
+            // AQUÍ ESTÁ EL CAMBIO: En la barra solo ponemos el título
+            triggerTexto.textContent = juego.titulo;
+            if (triggerImg) triggerImg.src = juego.icono;
             
             document.querySelectorAll('.dropdown-option').forEach(el => el.classList.remove('seleccionado'));
             optionDiv.classList.add('seleccionado');
@@ -170,8 +178,9 @@ function inicializarSelectorJuegosCustom() {
 
     const defecto = juegosGeneraciones.find(j => j.id === juegoSeleccionadoId);
     if (defecto) {
-        triggerTexto.textContent = defecto.nombre;
-        triggerImg.src = defecto.icono;
+        // Y aquí al cargar por defecto también
+        triggerTexto.textContent = defecto.titulo;
+        if (triggerImg) triggerImg.src = defecto.icono;
     }
 
     trigger.addEventListener('click', (e) => {
@@ -434,7 +443,7 @@ async function desglosarCadenaEvolutiva(nodo, maxId) {
 }
 
 /* =====================
-   LÓGICA DE CAPTURAR (SIN CORCHETES Y CON COLOR)
+   LÓGICA DE CAPTURAR
 ===================== */
 async function cargarCapturas(nombrePokemon) {
     contenedorCapturar.innerHTML = '<p>Buscando lugares de captura...</p>';
