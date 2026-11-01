@@ -1,230 +1,198 @@
-/* =====================
-   ESTILOS GENERALES Y FONDO
-===================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 body {
     background-color: #121212;
     color: #ffffff;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 20px 20px 90px 20px;
     display: flex;
-    justify-content: center;
-}
-
-.container {
-    width: 100%;
-    max-width: 480px;
-    background: #1e1e1e;
-    border-radius: 16px;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
     padding: 20px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-    box-sizing: border-box;
-    position: relative;
+    padding-bottom: 90px;
 }
 
-h1, h2 {
-    text-align: center;
-    color: #ffcb05;
+/* Ocultador de pestañas */
+.oculto {
+    display: none !important;
 }
 
-/* =====================
-   SELECTOR DE JUEGOS CUSTOM
-===================== */
-.selector-juego-custom {
+/* Selector Custom de Juegos */
+.selector-juego-container {
     position: relative;
     width: 100%;
-    margin-bottom: 20px;
+    max-width: 400px;
+    margin-bottom: 15px;
     user-select: none;
 }
 
 .dropdown-trigger {
+    background: #1e1e1e;
+    border: 1px solid #333;
+    padding: 10px 15px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
-    background: #252525;
-    border: 1px solid #3d3d3d;
-    border-radius: 12px;
-    padding: 12px 16px;
+    gap: 10px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    font-weight: bold;
+    color: #fff;
 }
 
-.dropdown-trigger:hover {
-    border-color: #ffcb05;
-    background: #2c2c2c;
+.dropdown-trigger img {
+    width: 24px;
+    height: 24px;
 }
 
-.juego-icono-img {
-    width: 26px;
-    height: 26px;
-    object-fit: contain;
-    margin-right: 12px;
-}
-
-#juego-seleccionado-nombre {
-    flex: 1;
-    font-weight: 600;
-    font-size: 0.95em;
-    color: #f1f1f1;
-    letter-spacing: 0.3px;
-}
-
-.dropdown-arrow {
-    font-size: 0.8em;
-    color: #888;
-    transition: transform 0.25s ease;
-}
-
-.selector-juego-custom.abierto .dropdown-arrow {
-    transform: rotate(180deg);
-    color: #ffcb05;
+.dropdown-trigger i {
+    margin-left: auto;
+    color: #aaa;
 }
 
 .dropdown-options {
     position: absolute;
-    top: calc(100% + 8px);
+    top: 105%;
     left: 0;
     width: 100%;
     background: #1e1e1e;
-    border: 1px solid #3d3d3d;
+    border: 1px solid #333;
     border-radius: 12px;
-    max-height: 280px;
     overflow-y: auto;
+    max-height: 250px;
     z-index: 100;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
-    box-sizing: border-box;
-}
-
-.dropdown-options.oculto {
-    display: none;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.5);
 }
 
 .dropdown-option {
+    padding: 10px 15px;
     display: flex;
     align-items: center;
-    padding: 12px 16px;
-    cursor: pointer;
-    transition: background 0.15s ease, padding-left 0.15s ease;
-    border-bottom: 1px solid #2a2a2a;
-    font-size: 0.9em;
-    font-weight: 500;
-    color: #dddddd;
-}
-
-.dropdown-option:last-child {
-    border-bottom: none;
-}
-
-.dropdown-option:hover {
-    background: #2c2c2c;
-    color: #ffffff;
-    padding-left: 20px;
-}
-
-.dropdown-option.seleccionado {
-    background: rgba(255, 203, 5, 0.12);
-    color: #ffcb05;
-    font-weight: 700;
-}
-
-/* Etiqueta de Generación de Colores */
-.gen-badge {
-    font-size: 0.7em;
-    font-weight: 700;
-    text-transform: uppercase;
-    padding: 2px 6px;
-    border-radius: 6px;
-    background: rgba(255, 255, 255, 0.08);
-    letter-spacing: 0.5px;
-}
-
-/* =====================
-   BUSCADOR
-===================== */
-.buscador-container {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 20px;
-    position: relative;
-}
-
-#buscador {
-    flex: 1;
-    padding: 10px 14px;
-    background: #2c2c2c;
-    border: 2px solid #444;
-    border-radius: 8px;
-    color: #fff;
-    font-size: 1em;
-    outline: none;
-}
-
-#buscador:focus {
-    border-color: #ffcb05;
-}
-
-#buscarBtn {
-    padding: 0 16px;
-    background: #ffcb05;
-    color: #121212;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
+    gap: 10px;
     cursor: pointer;
     transition: background 0.2s;
 }
 
-#buscarBtn:hover {
-    background: #e6b804;
+.dropdown-option:hover {
+    background: #2a2a2a;
+}
+
+.dropdown-option.seleccionado {
+    background: #333;
+}
+
+.gen-badge {
+    font-size: 0.75em;
+    padding: 2px 6px;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+/* Buscador */
+.buscador-container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.buscador-container input {
+    flex: 1;
+    background: #1e1e1e;
+    border: 1px solid #333;
+    padding: 10px 15px;
+    border-radius: 12px;
+    color: #fff;
+    outline: none;
+}
+
+.buscador-container button {
+    background: #e74c3c;
+    border: none;
+    padding: 0 15px;
+    border-radius: 12px;
+    color: #fff;
+    cursor: pointer;
 }
 
 .sugerencias {
     position: absolute;
-    top: calc(100% + 4px);
+    top: 105%;
     left: 0;
-    width: calc(100% - 85px);
-    background: #2c2c2c;
-    border: 1px solid #444;
+    width: 100%;
+    background: #1e1e1e;
     border-radius: 8px;
     z-index: 50;
-    max-height: 150px;
-    overflow-y: auto;
+    overflow: hidden;
 }
 
 .sugerencias div {
-    padding: 8px 12px;
+    padding: 10px 15px;
     cursor: pointer;
-    border-bottom: 1px solid #383838;
 }
 
 .sugerencias div:hover {
-    background: #383838;
+    background: #2a2a2a;
 }
 
-/* =====================
-   INFO POKÉMON
-===================== */
-#pokemon-info {
+/* Tarjeta Principal */
+.pokemon-card-container {
+    background: #1e1e1e;
+    border-radius: 20px;
+    padding: 20px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    border: 1px solid #2a2a2a;
+}
+
+.pokemon-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.pokemon-header h2 {
+    font-size: 1.5em;
+    text-transform: capitalize;
+}
+
+.pokemon-header span {
+    color: #777;
+    font-weight: bold;
+}
+
+.pokemon-img-container {
+    background: radial-gradient(circle, #2a2a2a 0%, #181818 70%);
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.pokemon-img-container img {
+    width: 160px;
+    height: 160px;
+    object-fit: contain;
+}
+
+/* Pestaña Info - Diseño Compacto */
+#seccion-info {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-#pokemon-imagen {
-    width: 180px;
-    height: 180px;
-    object-fit: contain;
-    margin: 10px 0;
-}
-
-#pokemon-numero {
-    color: #888;
-    margin: 0;
-    font-weight: bold;
-}
-
 .categoria {
     width: 100%;
-    margin-top: 15px;
+    margin-top: 8px;
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
@@ -233,45 +201,35 @@ h1, h2 {
 
 .categoria-titulo {
     width: 100%;
-    font-size: 0.9em;
+    font-size: 0.85em;
     font-weight: bold;
     color: #aaa;
-    margin-bottom: 4px;
+    margin-top: 6px;
+    margin-bottom: 2px;
     text-align: left;
 }
 
 .tipo {
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 0.85em;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.8em;
     font-weight: bold;
-    text-align: center;
+    text-transform: capitalize;
 }
 
-/* =====================
-   PESTAÑAS Y EVOLUCIONES
-===================== */
-.seccion-tab.oculto {
-    display: none !important;
-}
-
-.contenedor-evoluciones {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-    margin-top: 20px;
+/* Tarjetas Evoluciones y Capturas */
+.tarjeta-evolucion, .tarjeta-captura {
+    background: #252525;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    border: 1px solid #333;
 }
 
 .tarjeta-evolucion {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 12px;
-    padding: 12px 18px;
-    width: 100%;
-    box-sizing: border-box;
 }
 
 .evo-pkmn {
@@ -279,119 +237,61 @@ h1, h2 {
     flex-direction: column;
     align-items: center;
     cursor: pointer;
-    width: 90px;
+    font-size: 0.8em;
 }
 
 .evo-pkmn img {
-    width: 65px;
-    height: 65px;
-    object-fit: contain;
-}
-
-.evo-pkmn span {
-    font-size: 0.85em;
-    font-weight: bold;
-    text-transform: capitalize;
-    margin-top: 4px;
-    text-align: center;
+    width: 45px;
+    height: 45px;
 }
 
 .evo-metodo {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     text-align: center;
-    flex: 1;
-    padding: 0 10px;
-}
-
-.evo-metodo i {
-    font-size: 1.1em;
-    color: #ffcb05;
-    margin-bottom: 4px;
-}
-
-.evo-metodo span {
     font-size: 0.8em;
-    color: #ccc;
-    line-height: 1.2;
-}
-
-/* =====================
-   CAPTURAR (UBICACIONES)
-===================== */
-.contenedor-capturar {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 20px;
-    max-height: 400px;
-    overflow-y: auto;
-    padding-right: 4px;
-}
-
-.tarjeta-captura {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 12px;
-    padding: 12px 16px;
-    border-left: 4px solid #ffcb05;
-    box-sizing: border-box;
+    color: #bbb;
 }
 
 .captura-ubicacion {
     font-weight: bold;
     font-size: 0.95em;
     color: #ffcb05;
-    margin-bottom: 6px;
-    text-transform: capitalize;
+    margin-bottom: 4px;
 }
 
 .captura-detalles {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
     font-size: 0.85em;
     color: #ccc;
 }
 
 .metodo-badge {
-    display: inline-block;
     background: #333;
-    padding: 2px 8px;
-    border-radius: 6px;
-    font-size: 0.8em;
-    color: #fff;
-    margin-right: 6px;
-    text-transform: capitalize;
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 0.85em;
 }
 
-/* =====================
-   BARRA NAVEGACIÓN INFERIOR
-===================== */
-.menu-flotante {
+/* Barra Inferior (Navegación 3 Pestañas) */
+.barra-inferior {
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
     background: #181818;
-    border-top: 1px solid #333;
+    border-top: 1px solid #2a2a2a;
     display: flex;
     justify-content: space-around;
-    padding: 8px 0;
+    padding: 10px 0;
     z-index: 1000;
 }
 
 .menu-item {
-    background: none;
-    border: none;
-    color: #888;
     display: flex;
     flex-direction: column;
     align-items: center;
+    color: #777;
     cursor: pointer;
-    font-size: 0.75em;
-    gap: 4px;
-    flex: 1;
+    font-size: 0.85em;
+    gap: 3px;
     transition: color 0.2s;
 }
 
@@ -400,9 +300,5 @@ h1, h2 {
 }
 
 .menu-item.activo {
-    color: #ffcb05;
-}
-
-.menu-item:hover {
-    color: #fff;
+    color: #e74c3c;
 }
