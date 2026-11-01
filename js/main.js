@@ -154,10 +154,10 @@ async function cargarListaPokemon() {
 }
 
 /* =====================
-   API POKÉMON
+   API POKÉMON Y REGLAS HISTÓRICAS
 ===================== */
 async function obtenerPokemon(nombreOId) {
-    const busquedaLower = nombreOId.toString().toLowerCase();
+    const busquedaLower = nombreOId.toString().toLowerCase().trim();
     const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${busquedaLower}`);
     if (!res.ok) return null;
     const data = await res.json();
@@ -169,15 +169,26 @@ async function obtenerPokemon(nombreOId) {
         return null;
     }
 
+    let tiposPokemon = data.types.map(t => t.type.name);
+    const maxIdActual = obtenerMaxIdActual();
+
+    // El tipo Hada no existía antes de la Generación 6 (maxId < 721)
+    if (maxIdActual < 721) {
+        tiposPokemon = tiposPokemon.filter(t => t !== 'fairy');
+        if (tiposPokemon.length === 0 && data.types.length > 0) {
+            tiposPokemon = [data.types[0].type.name];
+        }
+    }
+
     return {
         nombre: data.name,
         numero: data.id,
-        tipos: data.types.map(t => t.type.name),
+        tipos: tiposPokemon,
         imagen: data.sprites.other['official-artwork'].front_default
     };
 }
 
-async function obtenerMultiplicadores(tipos) {
+async function obtenerMultiplicadores(tipos, maxIdActual) {
     let multiplicadores = {};
     const resTipos = await fetch('https://pokeapi.co/api/v2/type/');
     const dataTipos = await resTipos.json();
@@ -191,6 +202,34 @@ async function obtenerMultiplicadores(tipos) {
         dmg.double_damage_from.forEach(t => multiplicadores[t.name] *= 2);
         dmg.half_damage_from.forEach(t => multiplicadores[t.name] *= 0.5);
         dmg.no_damage_from.forEach(t => multiplicadores[t.name] *= 0);
+    }
+
+    // --- APLICAR REGLAS HISTÓRICAS SEGÚN LA GENERACIÓN SELECCIONADA ---
+
+    // 1. Generación 1 (Rojo / Azul, maxId === 151)
+    if (maxIdActual === 151) {
+        // En Gen 1, el tipo Psíquico era inmune al tipo Fantasma (bug de programación)
+        if (tipos.includes('psychic')) {
+            multiplicadores['ghost'] = 0;
+        }
+        // En Gen 1, el tipo Bicho vs Veneno era neutral (x1)
+        if (tipos.includes('poison')) {
+            multiplicadores['bug'] = 1;
+        }
+    }
+
+    // 2. Generaciones 2 a 5 (Oro/Plata hasta Negro/Blanco, maxId >= 251 && maxId <= 649)
+    if (maxIdActual >= 251 && maxIdActual <= 649) {
+        // En Gen 2-5, el tipo Acero resistía a Fantasma y Siniestro (x0.5)
+        if (tipos.includes('steel')) {
+            multiplicadores['ghost'] = 0.5;
+            multiplicadores['dark'] = 0.5;
+        }
+    }
+
+    // 3. Eliminar tipo Hada de los cálculos si la gen es anterior a la 6
+    if (maxIdActual < 721) {
+        delete multiplicadores['fairy'];
     }
 
     return multiplicadores;
@@ -223,14 +262,12 @@ async function mostrarPokemon(pokemon) {
         if (span) tiposContainer.appendChild(span);
     });
 
-    // MULTIPLICADORES (Debilidades, Resistencias, Inmunes, Neutros)
-    const multiplicadores = await obtenerMultiplicadores(pokemon.tipos);
+    // MULTIPLICADORES Y CATEGORÍAS
+    const maxIdActual = obtenerMaxIdActual();
+    const multiplicadores = await obtenerMultiplicadores(pokemon.tipos, maxIdActual);
     const categorias = { inmunes: [], resistencias: [], neutros: [], debilidades: [] };
 
     Object.entries(multiplicadores).forEach(([tipo, mult]) => {
-        const maxId = obtenerMaxIdActual();
-        if (tipo === 'fairy' && maxId < 721) return; 
-
         if (mult === 0) categorias.inmunes.push({ tipo, mult });
         else if (mult < 1) categorias.resistencias.push({ tipo, mult });
         else if (mult === 1) categorias.neutros.push({ tipo, mult });
