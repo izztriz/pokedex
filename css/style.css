@@ -42,24 +42,25 @@ body {
     border-radius: 12px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     cursor: pointer;
     font-weight: bold;
     color: #fff;
     width: 100%;
 }
 
-.dropdown-trigger img {
+.juego-icono-img {
     width: 24px;
     height: 24px;
     flex-shrink: 0;
+    object-fit: contain;
 }
 
 .dropdown-trigger span {
+    flex: 1;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    flex: 1;
     text-align: left;
 }
 
@@ -78,7 +79,7 @@ body {
     border: 1px solid #333;
     border-radius: 12px;
     overflow-y: auto;
-    max-height: 250px;
+    max-height: 260px;
     z-index: 100;
     box-shadow: 0 8px 16px rgba(0,0,0,0.5);
     box-sizing: border-box;
@@ -88,7 +89,7 @@ body {
     padding: 10px 15px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     cursor: pointer;
     transition: background 0.2s;
     width: 100%;
@@ -102,13 +103,26 @@ body {
     background: #333;
 }
 
-/* Corrección para que el nombre largo no pise la etiqueta Gen */
-.dropdown-option span:nth-child(2) {
+/* Contenedor interno en dos líneas perfectamente alineado */
+.juego-info-texto {
+    display: flex;
+    flex-direction: column;
     flex: 1;
+    min-width: 0;
+}
+
+.juego-titulo {
+    font-size: 0.9em;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.juego-ediciones {
+    font-size: 0.75em;
+    color: #888888;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    text-align: left;
 }
 
 .gen-badge {
@@ -216,7 +230,7 @@ body {
 }
 
 /* =====================
-   PESTAÑA INFO (DISEÑO COMPACTO)
+   PESTAÑA INFO
 ===================== */
 #seccion-info {
     display: flex;
