@@ -2,74 +2,82 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Pokédex</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" type="image/png" href="star.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokédex Multi-Generación</title>
+    <!-- FontAwesome para iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="container">
-        <!-- Selector de Juegos Personalizado -->
-        <div class="selector-juego-custom" id="selector-juego">
-            <div class="dropdown-trigger" id="dropdown-trigger">
-                <img src="assets/icons/game-placeholder.png" alt="" class="juego-icono-img placeholder-icon">
-                <span id="juego-seleccionado-nombre">Cargando...</span>
-                <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
-            </div>
-            <div class="dropdown-options oculto" id="dropdown-options"></div>
-        </div>
 
-        <h1>Pokédex</h1>
-        <div class="buscador-container">
-            <input type="text" id="buscador" placeholder="Busca por nombre o número">
-            <button id="buscarBtn">Buscar</button>
-            <div id="sugerencias" class="sugerencias"></div>
+    <!-- Selector de Juegos / Generaciones Custom -->
+    <div class="selector-juego-container" id="selector-juego">
+        <div class="dropdown-trigger" id="dropdown-trigger">
+            <img src="" alt="" class="juego-icono-img">
+            <span id="juego-seleccionado-nombre">Seleccionar juego</span>
+            <i class="fa-solid fa-chevron-down"></i>
         </div>
-
-        <!-- SECCIÓN 1: INFO -->
-        <div id="seccion-info" class="seccion-tab">
-            <div id="pokemon-info">
-                <h2 id="pokemon-nombre"></h2>
-                <p id="pokemon-numero"></p>
-                <img id="pokemon-imagen" alt="">
-                
-                <div id="tipos" class="categoria"></div>
-                <div id="debilidades" class="categoria"></div>
-                <div id="resistencias" class="categoria"></div>
-                <div id="inmunes" class="categoria"></div>
-                <div id="neutros" class="categoria"></div>
-            </div>
-        </div>
-
-        <!-- SECCIÓN 2: EVOLUCIONES -->
-        <div id="seccion-evoluciones" class="seccion-tab oculto">
-            <h2>Cadena de Evolución</h2>
-            <div id="contenedor-evoluciones" class="contenedor-evoluciones"></div>
-        </div>
-
-        <!-- SECCIÓN 3: CAPTURAR -->
-        <div id="seccion-capturar" class="seccion-tab oculto">
-            <h2>Lugares de Captura</h2>
-            <div id="contenedor-capturar" class="contenedor-capturar"></div>
+        <div class="dropdown-options oculto" id="dropdown-options">
+            <!-- Se llena dinámicamente desde JS -->
         </div>
     </div>
 
-    <!-- Barra de navegación flotante inferior -->
-    <nav class="menu-flotante">
-        <button class="menu-item activo" data-seccion="info">
+    <!-- Buscador Principal -->
+    <div class="buscador-container">
+        <input type="text" id="buscador" placeholder="Busca un Pokémon...">
+        <button id="buscarBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <div id="sugerencias" class="sugerencias"></div>
+    </div>
+
+    <!-- Contenedor Principal del Pokémon -->
+    <main class="pokemon-card-container">
+        <div class="pokemon-header">
+            <h2 id="pokemon-nombre"></h2>
+            <span id="pokemon-numero"></span>
+        </div>
+        
+        <div class="pokemon-img-container">
+            <img id="pokemon-imagen" src="" alt="">
+        </div>
+
+        <!-- SECCIÓN INFO (Pestaña 1) -->
+        <div id="seccion-info" class="seccion-tab">
+            <div id="tipos" class="categoria"></div>
+            <div id="debilidades" class="categoria"></div>
+            <div id="resistencias" class="categoria"></div>
+            <div id="inmunes" class="categoria"></div>
+            <div id="neutros" class="categoria"></div>
+        </div>
+
+        <!-- SECCIÓN EVOLUCIONES (Pestaña 2) -->
+        <div id="seccion-evoluciones" class="seccion-tab oculto">
+            <div id="contenedor-evoluciones"></div>
+        </div>
+
+        <!-- SECCIÓN CAPTURAR (Pestaña 3) -->
+        <div id="seccion-capturar" class="seccion-tab oculto">
+            <div id="contenedor-capturar"></div>
+        </div>
+    </main>
+
+    <!-- Barra de Navegación Inferior (3 Pestañas) -->
+    <nav class="barra-inferior">
+        <div class="menu-item activo" data-seccion="info">
             <i class="fa-solid fa-circle-info"></i>
             <span>Info</span>
-        </button>
-        <button class="menu-item" data-seccion="evoluciones">
-            <i class="fa-solid fa-bullseye"></i>
+        </div>
+        <div class="menu-item" data-seccion="evoluciones">
+            <i class="fa-solid fa-code-fork"></i>
             <span>Evoluciones</span>
-        </button>
-        <button class="menu-item" data-seccion="capturar">
+        </div>
+        <div class="menu-item" data-seccion="capturar">
             <i class="fa-solid fa-location-dot"></i>
             <span>Capturar</span>
-        </button>
+        </div>
     </nav>
 
+    <!-- Script principal -->
     <script src="js/main.js"></script>
 </body>
 </html>
