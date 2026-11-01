@@ -23,9 +23,11 @@ const contenedorCapturar = document.getElementById('contenedor-capturar');
 let pokemonActual = null;
 let listaPokemon = [];
 let tiposES = {};
+let ubicacionesES = {};
+let objetosES = {};
 
 // =====================
-// DICCIONARIOS DE TRADUCCIÓN Y COLORES
+// COLORES Y MÉTODOS DE CAPTURA
 // =====================
 const coloresGeneracion = {
     'gen1': '#ff5959', 
@@ -40,31 +42,6 @@ const coloresGeneracion = {
     'todos': '#2ecc71'  
 };
 
-const objetosES = {
-    'thunder-stone': 'Piedra Trueno',
-    'water-stone': 'Piedra Agua',
-    'fire-stone': 'Piedra Fuego',
-    'leaf-stone': 'Piedra Hoja',
-    'moon-stone': 'Piedra Lunar',
-    'sun-stone': 'Piedra Solar',
-    'dusk-stone': 'Piedra Noche',
-    'shiny-stone': 'Piedra Día',
-    'dawn-stone': 'Piedra Alba',
-    'oval-stone': 'Piedra Oval',
-    'ice-stone': 'Piedra Hielo',
-    'metal-coat': 'Revest. Metálico',
-    'kings-rock': 'Roca del Rey',
-    'dragon-scale': 'Escama Dragón',
-    'upgrade': 'Mejora',
-    'dubious-disc': 'Disco Dubioso',
-    'deep-sea-tooth': 'Dientes Marino',
-    'deep-sea-scale': 'Escama Marina',
-    'electirizer': 'Electrizador',
-    'magmarizer': 'Magmatizador',
-    'reaper-cloth': 'Tela Terrible',
-    'protector': 'Protector'
-};
-
 const metodosCapturaES = {
     'walk': 'Caminar',
     'surf': 'Surf',
@@ -77,63 +54,40 @@ const metodosCapturaES = {
     'grass-spots': 'Manchas de Hierba',
     'cave-spots': 'Manchas en Cueva',
     'bridge': 'Puente',
-    'gift': 'Regalo'
+    'gift': 'Regalo',
+    'seaweed': 'Algas Marinas',
+    'pokeflute': 'Poké Flauta',
+    'squirt-bottle': 'Regadera Cubo'
 };
 
 function traducirObjeto(nombreIngles) {
     if (!nombreIngles) return 'Objeto';
-    return objetosES[nombreIngles] || capitalize(nombreIngles.replace(/-/g, ' '));
+    let clave = nombreIngles.toLowerCase().trim();
+    return objetosES[clave] || capitalize(nombreIngles.replace(/-/g, ' '));
 }
 
+// =====================
+// TRADUCCIÓN LIMPIA DE UBICACIONES (Basada 100% en el JSON)
+// =====================
 function limpiarUbicacion(nombreArea) {
     if (!nombreArea) return '';
-    let limpio = nombreArea
-        .replace(/-area/g, '')
-        .replace(/-/g, ' ');
+    
+    let claveBase = nombreArea.replace(/-area$/i, '').toLowerCase();
 
-    // Traducciones masivas de términos en inglés comunes en las ubicaciones de la PokeAPI
-    limpiado = limpio
-        .replace(/route/gi, 'Ruta')
-        .replace(/mt/gi, 'Monte')
-        .replace(/mountain/gi, 'Montaña')
-        .replace(/cave/gi, 'Cueva')
-        .replace(/forest/gi, 'Bosque')
-        .replace(/tower/gi, 'Torre')
-        .replace(/power plant/gi, 'Central Energía')
-        .replace(/victory road/gi, 'Calle Victoria')
-        .replace(/cerulean cave/gi, 'Cueva Celeste')
-        .replace(/viridian forest/gi, 'Bosque Verde')
-        .replace(/rock tunnel/gi, 'Túnel Roca')
-        .replace(/pokemon mansion/gi, 'Mansión Pokémon')
-        .replace(/safari zone/gi, 'Zona Safari')
-        .replace(/seafoam islands/gi, 'Islas Espuma')
-        .replace(/digletts cave/gi, 'Cueva Diglett')
-        .replace(/power plant/gi, 'Central Energía')
-        .replace(/mansion/gi, 'Mansión')
-        .replace(/ruins/gi, 'Ruinas')
-        .replace(/island/gi, 'Isla')
-        .replace(/islands/gi, 'Islas')
-        .replace(/lake/gi, 'Lago')
-        .replace(/vally/gi, 'Valle')
-        .replace(/valley/gi, 'Valle')
-        .replace(/desert/gi, 'Desierto')
-        .replace(/beach/gi, 'Playa')
-        .replace(/sea/gi, 'Mar')
-        .replace(/ocean/gi, 'Océano')
-        .replace(/bay/gi, 'Bahía')
-        .replace(/grotto/gi, 'Gruta')
-        .replace(/summit/gi, 'Cima')
-        .replace(/outside/gi, 'Exterior')
-        .replace(/interior/gi, 'Interior')
-        .replace(/B[1-3]F/gi, (match) => match) // Mantener sótanos (ej. B1F) limpios
-        .replace(/\s+/g, ' ')
-        .trim();
+    // 1. Busca en nuestro archivo locations.json
+    if (ubicacionesES[claveBase]) {
+        return ubicacionesES[claveBase];
+    }
 
-    // Capitalizar cada palabra correctamente conservando números o abreviaturas
-    return limpio.split(' ').map(palabra => {
-        if (/^b[1-3]f$/i.test(palabra)) return palabra.toUpperCase();
-        return capitalize(palabra);
-    }).join(' ');
+    // 2. Si es una Ruta automática (ej: route-101)
+    if (claveBase.startsWith('route-')) {
+        let numRuta = claveBase.replace('route-', '').replace(/-/g, ' ');
+        return `Ruta ${numRuta.toUpperCase()}`;
+    }
+
+    // 3. Si no se encuentra, devuelve el texto limpio formateado
+    let limpio = claveBase.replace(/-/g, ' ');
+    return limpio.split(' ').map(palabra => capitalize(palabra)).join(' ');
 }
 
 // =====================
@@ -263,12 +217,26 @@ function limpiarContenedores() {
 /* =====================
    CARGAS INICIALES
 ===================== */
-async function cargarTipos() {
+async function cargarDatosExternos() {
     try {
-        const res = await fetch('data/types.json');
-        tiposES = await res.json();
+        const resTipos = await fetch('data/types.json');
+        tiposES = await resTipos.json();
     } catch (e) {
-        console.error("Asegúrate de tener data/types.json");
+        console.error("Error al cargar data/types.json");
+    }
+
+    try {
+        const resUbicaciones = await fetch('data/locations.json');
+        ubicacionesES = await resUbicaciones.json();
+    } catch (e) {
+        console.error("Error al cargar data/locations.json");
+    }
+
+    try {
+        const resItems = await fetch('data/items.json');
+        objetosES = await resItems.json();
+    } catch (e) {
+        console.error("Error al cargar data/items.json");
     }
 }
 
@@ -657,7 +625,7 @@ menuItems.forEach(item => {
 ===================== */
 window.addEventListener('load', async () => {
     inicializarSelectorJuegosCustom();
-    await cargarTipos();
+    await cargarDatosExternos();
     await cargarListaPokemon();
     buscador.value = '';
     buscarPokemon('bulbasaur');
