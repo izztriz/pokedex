@@ -1,3 +1,6 @@
+/* =====================
+   ESTILOS GENERALES
+===================== */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -11,17 +14,19 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
     min-height: 100vh;
     padding: 20px;
     padding-bottom: 90px;
 }
 
-/* Ocultador de pestañas */
 .oculto {
     display: none !important;
 }
 
-/* Selector Custom de Juegos */
+/* =====================
+   SELECTOR DE JUEGOS
+===================== */
 .selector-juego-container {
     position: relative;
     width: 100%;
@@ -91,7 +96,9 @@ body {
     font-weight: bold;
 }
 
-/* Buscador */
+/* =====================
+   BUSCADOR
+===================== */
 .buscador-container {
     position: relative;
     width: 100%;
@@ -140,7 +147,9 @@ body {
     background: #2a2a2a;
 }
 
-/* Tarjeta Principal */
+/* =====================
+   TARJETA PRINCIPAL POKÉMON
+===================== */
 .pokemon-card-container {
     background: #1e1e1e;
     border-radius: 20px;
@@ -183,7 +192,9 @@ body {
     object-fit: contain;
 }
 
-/* Pestaña Info - Diseño Compacto */
+/* =====================
+   PESTAÑA INFO (DISEÑO COMPACTO)
+===================== */
 #seccion-info {
     display: flex;
     flex-direction: column;
@@ -217,7 +228,9 @@ body {
     text-transform: capitalize;
 }
 
-/* Tarjetas Evoluciones y Capturas */
+/* =====================
+   TARJETAS EVOLUCIONES Y CAPTURAS
+===================== */
 .tarjeta-evolucion, .tarjeta-captura {
     background: #252525;
     border-radius: 10px;
@@ -270,7 +283,9 @@ body {
     font-size: 0.85em;
 }
 
-/* Barra Inferior (Navegación 3 Pestañas) */
+/* =====================
+   BARRA INFERIOR (PESTAÑAS)
+===================== */
 .barra-inferior {
     position: fixed;
     bottom: 0;
