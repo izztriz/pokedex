@@ -108,19 +108,19 @@ function limpiarUbicacion(nombreArea) {
 }
 
 // =====================
-// CONFIGURACIÓN DE JUEGOS
+// CONFIGURACIÓN DE JUEGOS POR REGIÓN
 // =====================
 const juegosGeneraciones = [
-    { id: 'gen1', nombre: 'Rojo / Azul', maxId: 151, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png' },
-    { id: 'gen2', nombre: 'Oro / Plata', maxId: 251, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png' },
-    { id: 'gen3', nombre: 'Rubí / Zafiro', maxId: 386, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ultra-ball.png' },
-    { id: 'gen4', nombre: 'Platino', maxId: 493, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png' },
-    { id: 'gen5', nombre: 'Negro / Blanco', maxId: 649, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/luxury-ball.png' },
-    { id: 'gen6', nombre: 'X / Y', maxId: 721, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/premier-ball.png' },
-    { id: 'gen7', nombre: 'Sol / Luna', maxId: 809, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/beast-ball.png' },
-    { id: 'gen8', nombre: 'Espada / Escudo', maxId: 905, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/level-ball.png' },
-    { id: 'gen9', nombre: 'Scarlet / Violet', maxId: 1025, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/cherish-ball.png' },
-    { id: 'todos', nombre: 'Todas (Nacional)', maxId: 100000, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/safari-ball.png' }
+	{ id: 'todos', nombre: 'Nacional', maxId: 100000, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/safari-ball.png' },
+    { id: 'gen1', nombre: 'Kanto', maxId: 151, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png' },
+    { id: 'gen2', nombre: 'Johto', maxId: 251, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png' },
+    { id: 'gen3', nombre: 'Hoenn', maxId: 386, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ultra-ball.png' },
+    { id: 'gen4', nombre: 'Sinnoh', maxId: 493, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png' },
+    { id: 'gen5', nombre: 'Teselia', maxId: 649, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/luxury-ball.png' },
+    { id: 'gen6', nombre: 'Kalos', maxId: 721, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/premier-ball.png' },
+    { id: 'gen7', nombre: 'Alola', maxId: 809, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/beast-ball.png' },
+    { id: 'gen8', nombre: 'Galar', maxId: 905, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/level-ball.png' },
+    { id: 'gen9', nombre: 'Paldea', maxId: 1025, icono: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/cherish-ball.png' }
 ];
 
 let juegoSeleccionadoId = juegosGeneraciones[0].id;
