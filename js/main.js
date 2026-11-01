@@ -91,17 +91,49 @@ function limpiarUbicacion(nombreArea) {
         .replace(/-area/g, '')
         .replace(/-/g, ' ');
 
+    // Traducciones masivas de términos en inglés comunes en las ubicaciones de la PokeAPI
     limpiado = limpio
-        .replace(/route /gi, 'Ruta ')
-        .replace(/viridian forest/gi, 'Bosque Verde')
-        .replace(/mt moon/gi, 'Monte Moon')
-        .replace(/rock tunnel/gi, 'Túnel Roca')
-        .replace(/pokemon tower/gi, 'Torre Pokémon')
+        .replace(/route/gi, 'Ruta')
+        .replace(/mt/gi, 'Monte')
+        .replace(/mountain/gi, 'Montaña')
+        .replace(/cave/gi, 'Cueva')
+        .replace(/forest/gi, 'Bosque')
+        .replace(/tower/gi, 'Torre')
         .replace(/power plant/gi, 'Central Energía')
         .replace(/victory road/gi, 'Calle Victoria')
-        .replace(/cerulean cave/gi, 'Cueva Celeste');
+        .replace(/cerulean cave/gi, 'Cueva Celeste')
+        .replace(/viridian forest/gi, 'Bosque Verde')
+        .replace(/rock tunnel/gi, 'Túnel Roca')
+        .replace(/pokemon mansion/gi, 'Mansión Pokémon')
+        .replace(/safari zone/gi, 'Zona Safari')
+        .replace(/seafoam islands/gi, 'Islas Espuma')
+        .replace(/digletts cave/gi, 'Cueva Diglett')
+        .replace(/power plant/gi, 'Central Energía')
+        .replace(/mansion/gi, 'Mansión')
+        .replace(/ruins/gi, 'Ruinas')
+        .replace(/island/gi, 'Isla')
+        .replace(/islands/gi, 'Islas')
+        .replace(/lake/gi, 'Lago')
+        .replace(/vally/gi, 'Valle')
+        .replace(/valley/gi, 'Valle')
+        .replace(/desert/gi, 'Desierto')
+        .replace(/beach/gi, 'Playa')
+        .replace(/sea/gi, 'Mar')
+        .replace(/ocean/gi, 'Océano')
+        .replace(/bay/gi, 'Bahía')
+        .replace(/grotto/gi, 'Gruta')
+        .replace(/summit/gi, 'Cima')
+        .replace(/outside/gi, 'Exterior')
+        .replace(/interior/gi, 'Interior')
+        .replace(/B[1-3]F/gi, (match) => match) // Mantener sótanos (ej. B1F) limpios
+        .replace(/\s+/g, ' ')
+        .trim();
 
-    return capitalize(limpiado);
+    // Capitalizar cada palabra correctamente conservando números o abreviaturas
+    return limpio.split(' ').map(palabra => {
+        if (/^b[1-3]f$/i.test(palabra)) return palabra.toUpperCase();
+        return capitalize(palabra);
+    }).join(' ');
 }
 
 // =====================
@@ -154,13 +186,10 @@ function inicializarSelectorJuegosCustom() {
             optionsContainer.classList.add('oculto');
             selectorContainer.classList.remove('abierto');
             
-            // --- NUEVA LÓGICA AQUÍ ---
             const textoBuscador = buscador.value.trim();
             if (textoBuscador) {
-                // Si hay algo escrito, intentamos mantenerlo y buscarlo en la nueva gen
                 buscarPokemon(textoBuscador);
             } else {
-                // Si no hay nada escrito, cargamos a Bulbasaur por defecto
                 buscarPokemon('bulbasaur');
             }
         });
